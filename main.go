@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/miki799/rsa-cryptosystem/rsa"
+	"github.com/miki799/rsa-cryptosystem/utils"
 )
 
 func main() {
@@ -15,20 +16,23 @@ func main() {
 
 	fmt.Printf("message to encrypt: %v\n", message)
 
-	publicKey, privateKey, err := rsa.GenerateKeys(768)
+	fmt.Println("Generating keys...")
+	publicKey, privateKey, err := rsa.GenerateKeys(1024)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Printf("publicKey.String(): %v\n", publicKey.String())
-	fmt.Printf("privateKey.String(): %v\n", privateKey.String())
+	fmt.Println("Encrypting...")
+	cryptogram := rsa.Encrypt(message, publicKey)
 
-	cryptogram, err := rsa.Encrypt(message, publicKey)
-	if err != nil {
-		fmt.Println(err)
-		return
+	fmt.Println("Decrypting...")
+	decryptedMessage := rsa.Decrypt(cryptogram, privateKey)
+
+	if rsa.Verify(message, decryptedMessage) {
+		fmt.Println("RSA cryptosystem works! Messages are the same!")
+	} else {
+		fmt.Println("RSA cryptosystem does not work! Messages are notthe same!")
 	}
-
-	fmt.Printf("cryptogram: %v\n", cryptogram)
+	fmt.Printf("decryptedMessage: %v\n", decryptedMessage)
 
 }

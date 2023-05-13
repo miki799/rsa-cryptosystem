@@ -43,3 +43,24 @@ func GeneratePrimeNumber(bits int) (*big.Int, error) {
 		fmt.Println("Generated number is not prime!", err)
 	}
 }
+
+func ConvertStringToBigIntsSlice(str string) []*big.Int {
+	strBytes := []byte(str)
+
+	bigInts := make([]*big.Int, 0, len(strBytes))
+	for _, b := range strBytes {
+		bigInts = append(bigInts, big.NewInt(int64(b)))
+	}
+
+	return bigInts
+}
+
+func ConvertBigIntsSliceToString(arr []*big.Int) string {
+	var result []byte
+
+	for _, num := range arr {
+		result = append(result, num.Bytes()...)
+	}
+
+	return string(result)
+}
